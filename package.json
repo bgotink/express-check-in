@@ -1,0 +1,56 @@
+{
+  "name": "express-check-in",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "author": {
+    "name": "Bram Gotink",
+    "url": "https://github.com/bgotink"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bgotink/express-check-in"
+  },
+  "scripts": {
+    "postinstall": "is-ci || husky install",
+    "build": "tsc"
+  },
+  "bin": "bin/express-check-in.js",
+  "files": [
+    "bin",
+    "dist",
+    "LICENSE.md",
+    "README.md"
+  ],
+  "peerDependencies": {
+    "cspell-lib": "^5.4.1",
+    "prettier": "^2.3.0"
+  },
+  "peerDependenciesMeta": {
+    "cspell-lib": {
+      "optional": true
+    },
+    "prettier": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/chalk": "^2.2.0",
+    "@types/mri": "^1.1.0",
+    "@types/node": "^14.0.0",
+    "@types/prettier": "^2.2.3",
+    "@yarnpkg/pnpify": "^2.4.0",
+    "cspell-lib": "^5.4.1",
+    "husky": "^6.0.0",
+    "is-ci": "^3.0.0",
+    "prettier": "^2.3.0",
+    "typescript": "~4.2.4"
+  },
+  "dependencies": {
+    "chalk": "^4.1.1",
+    "execa": "^5.0.0",
+    "mri": "^1.1.6",
+    "multimatch": "^5.0.0"
+  }
+}
