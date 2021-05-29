@@ -1,2 +1,4 @@
 .pnp.js
 .yarn
+
+/__tests__/__fixtures__

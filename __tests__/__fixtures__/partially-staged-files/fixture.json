@@ -1,0 +1,4 @@
+{
+  "command": "express-check-in",
+  "args": ["--staged"]
+}
