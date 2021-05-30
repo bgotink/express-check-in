@@ -10,10 +10,9 @@ const path = require('path');
  * @param {string} p
  * @returns {Promise<boolean>}
  */
-async function exists(p) {
+async function isDirectory(p) {
   try {
-    await fs.stat(p);
-    return true;
+    return (await fs.stat(p)).isDirectory();
   } catch {
     return false;
   }
@@ -55,6 +54,17 @@ const tmpDirectory = path.join(tmpdir(), 'express-check-in');
 const fixturesPath = path.join(__dirname, '__fixtures__');
 
 /**
+ * @param  {...(() => Promise<void>)} promiseFactories
+ * @returns {Promise<void>}
+ */
+function chain(...promiseFactories) {
+  return promiseFactories.reduce(
+    (promise, factory) => promise.then(() => factory()),
+    Promise.resolve(),
+  );
+}
+
+/**
  * @param {string} name
  * @param {import('ava').ExecutionContext} t
  */
@@ -78,7 +88,11 @@ async function loadFixture(name, t) {
     fs.readJson(path.join(fixturePath, 'fixture.json')),
     git('init').then(() =>
       Promise.all([
-        git('config', 'commit.gpgSign', 'false'),
+        chain(
+          () => git('config', 'commit.gpgSign', 'false'),
+          () => git('config', 'user.name', 'Testy McTestface'),
+          () => git('config', 'user.email', 'testy@example.com'),
+        ),
         fs.writeFile(
           path.join(repo, '.git/info/exclude'),
           '.prettierrc.yml\n.editorconfig\n',
@@ -97,7 +111,7 @@ async function loadFixture(name, t) {
 
   {
     const committed = path.join(fixturePath, 'committed');
-    if (await exists(committed)) {
+    if (await isDirectory(committed)) {
       await fs.copy(committed, repoFiles);
       await git('add', '-A', ':/');
       await git('commit', '-m', 'committed state');
@@ -106,7 +120,7 @@ async function loadFixture(name, t) {
 
   {
     const staged = path.join(fixturePath, 'staged');
-    if (await exists(staged)) {
+    if (await isDirectory(staged)) {
       if (fixtureSettings.clean) {
         await fs.remove(repoFiles);
       }
@@ -117,7 +131,7 @@ async function loadFixture(name, t) {
 
   {
     const unstaged = path.join(fixturePath, 'unstaged');
-    if (await exists(unstaged)) {
+    if (await isDirectory(unstaged)) {
       if (fixtureSettings.clean) {
         await fs.remove(repoFiles);
       }
@@ -132,7 +146,7 @@ async function loadFixture(name, t) {
       fixturePath,
       'expected-working-directory',
     );
-    if (await exists(expectedWorkingDirectory)) {
+    if (await isDirectory(expectedWorkingDirectory)) {
       for (const file of await fs.readdir(expectedWorkingDirectory)) {
         t.is(
           await fs.readFile(path.join(repoFiles, file), 'utf-8'),
@@ -145,7 +159,7 @@ async function loadFixture(name, t) {
 
   {
     const expectedIndex = path.join(fixturePath, 'expected-index');
-    if (await exists(expectedIndex)) {
+    if (await isDirectory(expectedIndex)) {
       await git('restore', 'src');
       for (const file of await fs.readdir(expectedIndex)) {
         t.is(
