@@ -1,0 +1,37 @@
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+name: 'CI'
+jobs:
+  validation:
+    name: 'Validation'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+
+      - name: Install
+        shell: bash
+        run: |
+          yarn install --immutable
+
+      - name: Build
+        shell: bash
+        run: |
+          yarn build
+
+      - name: 'Check for formatting errors (fix w/ "yarn prettier --write path/to/file")'
+        run: |
+          yarn prettier --check .
+        shell: bash
+
+      - name: Test
+        shell: bash
+        run: |
+          yarn test
