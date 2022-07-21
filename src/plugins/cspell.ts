@@ -18,7 +18,10 @@ const plugin: PluginFactory =
 
     if (result.checked) {
       markExamined();
-      markChecked(!result.issues?.length);
+      markChecked(
+        !result.issues?.length,
+        result.issues?.map(issue => JSON.stringify(issue.text)).join(', '),
+      );
     }
   };
 
