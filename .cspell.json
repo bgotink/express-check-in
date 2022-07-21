@@ -20,7 +20,7 @@
     ".vscode/**",
     ".yarn/**",
     "**/__tests__/**",
-    ".pnp.js",
+    ".pnp.*",
     "yarn.lock"
   ]
 }

@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 'use strict';
 
-const chalk = require('chalk');
-const mri = require('mri');
+import chalk from 'chalk';
+import mri from 'mri';
 
-const expressCheckIn = require('..').default;
+import expressCheckIn, {FailReason} from '.';
 
 const args = mri(process.argv.slice(2), {
   alias: {
@@ -16,13 +16,6 @@ const args = mri(process.argv.slice(2), {
 
 expressCheckIn({
   ...args,
-  onFoundSinceRevision: (scm, revision) => {
-    console.log(
-      `🔍  Finding changed files since ${chalk.bold(scm)} revision ${chalk.bold(
-        revision,
-      )}.`,
-    );
-  },
 
   onFoundChangedFiles: changedFiles => {
     console.log(
@@ -54,12 +47,12 @@ expressCheckIn({
     if (expressCheckInResult.success) {
       console.log('✅  Everything is awesome!');
     } else {
-      if (expressCheckInResult.errors.indexOf('BAIL_ON_WRITE') !== -1) {
+      if (expressCheckInResult.errors.indexOf(FailReason.BailOnWrite) !== -1) {
         console.log(
           '✗ File had to be modified and expressCheckIn was set to bail mode.',
         );
       }
-      if (expressCheckInResult.errors.indexOf('CHECK_FAILED') !== -1) {
+      if (expressCheckInResult.errors.indexOf(FailReason.CheckFailed) !== -1) {
         console.log('✗ Issues found in the above file(s).');
       }
       process.exit(1); // ensure git hooks abort
