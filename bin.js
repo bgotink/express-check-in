@@ -1,3 +1,1 @@
-require('ts-node/register');
-
-require('./src/bin.ts');
+import './src/bin.js';

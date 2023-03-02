@@ -1,10 +1,13 @@
 {
-  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "dist",
-    "rootDir": "src",
-    "types": ["node"]
+    "checkJs": true,
+    "noEmit": true,
+
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "target": "es2022",
+
+    "strict": true
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["**/__tests__/**/*"]
+  "include": ["src/**/*", "test/*.js"]
 }

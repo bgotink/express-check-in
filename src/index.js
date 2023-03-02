@@ -1,37 +1,40 @@
-import {promises as fs} from 'fs';
-import {resolve} from 'path';
+import fs from 'node:fs/promises';
+import {resolve} from 'node:path';
 
-import {findScm} from './scm';
-import {detectAvailableBuiltins, resolvePlugins} from './plugin';
-import {createMatcher} from './util/match';
+import {findScm} from './scm.js';
+import {detectAvailableBuiltins, resolvePlugins} from './plugin.js';
+import {createMatcher} from './util/match.js';
 
-export interface Options {
-  bail?: boolean;
-  check?: boolean;
-  directory?: string;
-  pattern?: string | readonly string[];
-  plugins?: string | readonly string[];
-  resolveConfig?: boolean;
-  staged?: boolean;
-  verbose?: boolean;
-  onCheckFile?(file: string, isOkay: boolean, reason?: string): void;
-  onExamineFile?(file: string): void;
-  onFoundChangedFiles?(file: readonly string[]): void;
-  onPartiallyStagedFile?(file: string): void;
-  onWriteFile?(file: string): void;
-}
+/**
+ * @typedef {object} Options
+ * @property {boolean} [bail]
+ * @property {boolean} [check]
+ * @property {string} [directory]
+ * @property {string | readonly string[]} [pattern]
+ * @property {string | readonly string[]} [plugins]
+ * @property {boolean} [resolveConfig]
+ * @property {boolean} [staged]
+ * @property {boolean} [verbose]
+ * @property {(file: string, isOkay: boolean, reason?: string) => void} [onCheckFile]
+ * @property {(file: string) => void} [onExamineFile]
+ * @property {(file: readonly string[]) => void} [onFoundChangedFiles]
+ * @property {(file: string) => void} [onPartiallyStagedFile]
+ * @property {(file: string) => void} [onWriteFile]
+ */
 
-export const enum FailReason {
-  BailOnWrite = 'BAIL_ON_WRITE',
-  CheckFailed = 'CHECK_FAILED',
-}
+/**
+ * @typedef {'BAIL_ON_WRITE' | 'CHECK_FAILED'} FailReason
+ */
 
+/**
+ * @param {Options} options
+ */
 export default async function expressCheckIn({
   bail = false,
   check = false,
   directory = process.cwd(),
   pattern,
-  plugins: pluginNames = detectAvailableBuiltins(),
+  plugins: pluginNames,
   resolveConfig = true,
   staged = false,
   verbose = false,
@@ -40,15 +43,17 @@ export default async function expressCheckIn({
   onFoundChangedFiles,
   onPartiallyStagedFile,
   onWriteFile,
-}: Options) {
+}) {
   const scm = await findScm(directory);
 
   if (scm == null) {
     throw new Error(`Couldn't find git repository`);
   }
 
-  let changedFiles: readonly string[];
-  let changeIndexOnly: ReadonlySet<string>;
+  /** @type {readonly string[]} */
+  let changedFiles;
+  /** @type {ReadonlySet<string>} */
+  let changeIndexOnly;
 
   if (staged) {
     changedFiles = Array.from(scm.getChangedFiles());
@@ -71,9 +76,12 @@ export default async function expressCheckIn({
     };
   }
 
-  const plugin = await (await resolvePlugins(pluginNames))(scm.root, directory);
+  const plugin = await (
+    await resolvePlugins(pluginNames ?? (await detectAvailableBuiltins()))
+  )(scm.root, directory);
 
-  const failReasons = new Set<FailReason>();
+  /** @type {Set<FailReason>} */
+  const failReasons = new Set();
 
   for (const path of changedFiles) {
     const useIndex = changeIndexOnly.has(path);
@@ -87,14 +95,14 @@ export default async function expressCheckIn({
     await plugin(resolvedPath, content, {
       check,
       resolveConfig,
-      async writeFile(newContent: string) {
+      async writeFile(newContent) {
         if (newContent === content) {
           return;
         }
 
         onWriteFile?.(path);
         if (bail) {
-          failReasons.add(FailReason.BailOnWrite);
+          failReasons.add('BAIL_ON_WRITE');
         } else {
           if (useIndex) {
             onPartiallyStagedFile?.(path);
@@ -110,7 +118,7 @@ export default async function expressCheckIn({
       markChecked(isOkay, reason) {
         onCheckFile?.(path, isOkay, reason);
         if (!isOkay) {
-          failReasons.add(FailReason.CheckFailed);
+          failReasons.add('CHECK_FAILED');
         }
       },
       markExamined() {

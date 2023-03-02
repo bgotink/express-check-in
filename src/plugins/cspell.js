@@ -1,8 +1,9 @@
 import {spellCheckDocument, fileToDocument} from 'cspell-lib';
 
-import type {PluginFactory} from '../plugin';
-
-const plugin: PluginFactory =
+/**
+ * @type {import('../plugin.js').PluginFactory}
+ */
+const plugin =
   () =>
   async (filename, content, {resolveConfig, markExamined, markChecked}) => {
     const document = fileToDocument(filename, content);

@@ -4,7 +4,7 @@
 import chalk from 'chalk';
 import mri from 'mri';
 
-import expressCheckIn, {FailReason} from '.';
+import expressCheckIn from './index.js';
 
 const args = mri(process.argv.slice(2), {
   alias: {
@@ -47,12 +47,12 @@ expressCheckIn({
     if (expressCheckInResult.success) {
       console.log('✅  Everything is awesome!');
     } else {
-      if (expressCheckInResult.errors.indexOf(FailReason.BailOnWrite) !== -1) {
+      if (expressCheckInResult.errors.indexOf('BAIL_ON_WRITE') !== -1) {
         console.log(
           '✗ File had to be modified and expressCheckIn was set to bail mode.',
         );
       }
-      if (expressCheckInResult.errors.indexOf(FailReason.CheckFailed) !== -1) {
+      if (expressCheckInResult.errors.indexOf('CHECK_FAILED') !== -1) {
         console.log('✗ Issues found in the above file(s).');
       }
       process.exit(1); // ensure git hooks abort

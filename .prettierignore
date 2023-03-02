@@ -2,4 +2,4 @@
 .yarn
 
 /dist
-/__tests__/__fixtures__
+/test/__fixtures__

@@ -1,7 +1,11 @@
-import {promises as fs} from 'fs';
-import {join, dirname, parse, resolve} from 'path';
+import fs from 'node:fs/promises';
+import {join, dirname, parse, resolve} from 'node:path';
 
-export async function findUp(from: string, subDirectory: string) {
+/**
+ * @param {string} from
+ * @param {string} subDirectory
+ */
+export async function findUp(from, subDirectory) {
   let current = resolve(from);
   const {root} = parse(current);
 

@@ -1,29 +1,40 @@
-import execa from 'execa';
+import {execa} from 'execa';
 import {Readable} from 'stream';
 
 export class ExecError extends Error {
-  constructor(message: string, readonly stderr: string) {
+  stderr;
+
+  /**
+   * @param {string} message
+   * @param {string} stderr
+   */
+  constructor(message, stderr) {
     super(message);
     this.name = new.target.name;
+    this.stderr = stderr;
   }
 }
 
-export function exec(
-  command: string,
-  args: string[],
-  {cwd, input}: {cwd: string; input?: string},
-) {
-  return new Promise<string>((resolve, reject) => {
+/**
+ * @param {string} command
+ * @param {readonly string[]} args
+ * @param {{cwd: string; input?: string}} opts
+ * @returns {Promise<string>}
+ */
+export function exec(command, args, {cwd, input}) {
+  return new Promise((resolve, reject) => {
     const child = execa(command, args, {
       cwd,
       stdio: [input ? 'pipe' : 'ignore', 'pipe', 'pipe'],
     });
 
-    const out: Buffer[] = [];
-    const err: Buffer[] = [];
+    /** @type {Buffer[]} */
+    const out = [];
+    /** @type {Buffer[]} */
+    const err = [];
 
-    child.stdout!.on('data', buf => out.push(buf));
-    child.stderr!.on('data', buf => err.push(buf));
+    /** @type {Readable} */ (child.stdout).on('data', buf => out.push(buf));
+    /** @type {Readable} */ (child.stderr).on('data', buf => err.push(buf));
 
     if (child.stdin && input) {
       Readable.from(input).pipe(child.stdin, {end: true});
