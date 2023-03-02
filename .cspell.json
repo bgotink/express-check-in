@@ -1,26 +1,26 @@
 {
-  "words": [
-    "bgotink",
-    "bram",
-    "builtins",
-    "editorconfig",
-    "execa",
-    "gotink",
-    "multimatch",
-    "pnpify",
-    "precommit",
-    "prettierignore",
-    "prettierrc",
-    "scms",
-    "shellsession",
-    "unstaged",
-    "yarnpkg"
-  ],
-  "ignorePaths": [
-    ".vscode/**",
-    ".yarn/**",
-    "**/__tests__/**",
-    ".pnp.*",
-    "yarn.lock"
-  ]
+	"words": [
+		"bgotink",
+		"bram",
+		"builtins",
+		"editorconfig",
+		"execa",
+		"gotink",
+		"multimatch",
+		"pnpify",
+		"precommit",
+		"prettierignore",
+		"prettierrc",
+		"scms",
+		"shellsession",
+		"unstaged",
+		"yarnpkg"
+	],
+	"ignorePaths": [
+		".vscode/**",
+		".yarn/**",
+		"**/__tests__/**",
+		".pnp.*",
+		"yarn.lock"
+	]
 }

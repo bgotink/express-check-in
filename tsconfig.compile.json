@@ -1,13 +1,13 @@
 {
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "noEmit": false,
-    "emitDeclarationOnly": true,
-    "declaration": true,
-    "outDir": "dist",
-    "rootDir": "src"
-  },
-  "files": ["src/index.js"],
-  "include": ["src/**/*"],
-  "exclude": ["test/**/*"]
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"noEmit": false,
+		"emitDeclarationOnly": true,
+		"declaration": true,
+		"outDir": "dist",
+		"rootDir": "src"
+	},
+	"files": ["src/index.js"],
+	"include": ["src/**/*"],
+	"exclude": ["test/**/*"]
 }

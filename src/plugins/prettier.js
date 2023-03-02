@@ -6,56 +6,56 @@ import prettier from 'prettier';
  * @type {import('../plugin.js').PluginFactory}
  */
 const plugin = async (rootDirectory, directory) => {
-  /** @type {string=} */
-  let ignorePath;
+	/** @type {string=} */
+	let ignorePath;
 
-  for (const dir of [directory, rootDirectory]) {
-    const file = join(dir, '.prettierignore');
-    try {
-      if ((await fs.stat(file)).isFile()) {
-        ignorePath = file;
-        break;
-      }
-    } catch {
-      // ignore
-    }
-  }
+	for (const dir of [directory, rootDirectory]) {
+		const file = join(dir, '.prettierignore');
+		try {
+			if ((await fs.stat(file)).isFile()) {
+				ignorePath = file;
+				break;
+			}
+		} catch {
+			// ignore
+		}
+	}
 
-  return async (
-    filename,
-    content,
-    {check, resolveConfig, markChecked, markExamined, writeFile},
-  ) => {
-    const fileInfo = await prettier.getFileInfo(filename, {
-      resolveConfig,
-      ignorePath,
-    });
+	return async (
+		filename,
+		content,
+		{check, resolveConfig, markChecked, markExamined, writeFile},
+	) => {
+		const fileInfo = await prettier.getFileInfo(filename, {
+			resolveConfig,
+			ignorePath,
+		});
 
-    if (fileInfo.ignored || fileInfo.inferredParser == null) {
-      return;
-    }
+		if (fileInfo.ignored || fileInfo.inferredParser == null) {
+			return;
+		}
 
-    markExamined();
+		markExamined();
 
-    const options = {
-      ...(await prettier.resolveConfig(filename, {
-        editorconfig: true,
-      })),
-      filepath: filename,
-    };
+		const options = {
+			...(await prettier.resolveConfig(filename, {
+				editorconfig: true,
+			})),
+			filepath: filename,
+		};
 
-    if (check) {
-      const isFormatted = prettier.check(content, options);
+		if (check) {
+			const isFormatted = prettier.check(content, options);
 
-      markChecked(isFormatted);
-      return;
-    }
+			markChecked(isFormatted);
+			return;
+		}
 
-    const output = prettier.format(content, options);
+		const output = prettier.format(content, options);
 
-    if (output !== content) {
-      await writeFile(output);
-    }
-  };
+		if (output !== content) {
+			await writeFile(output);
+		}
+	};
 };
 export default plugin;

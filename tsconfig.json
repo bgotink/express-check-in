@@ -1,13 +1,13 @@
 {
-  "compilerOptions": {
-    "checkJs": true,
-    "noEmit": true,
+	"compilerOptions": {
+		"checkJs": true,
+		"noEmit": true,
 
-    "module": "Node16",
-    "moduleResolution": "Node16",
-    "target": "es2022",
+		"module": "Node16",
+		"moduleResolution": "Node16",
+		"target": "es2022",
 
-    "strict": true
-  },
-  "include": ["src/**/*", "test/*.js"]
+		"strict": true
+	},
+	"include": ["src/**/*", "test/*.js"]
 }

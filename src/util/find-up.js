@@ -6,18 +6,18 @@ import {join, dirname, parse, resolve} from 'node:path';
  * @param {string} subDirectory
  */
 export async function findUp(from, subDirectory) {
-  let current = resolve(from);
-  const {root} = parse(current);
+	let current = resolve(from);
+	const {root} = parse(current);
 
-  while (true) {
-    if ((await fs.stat(join(current, subDirectory))).isDirectory()) {
-      return current;
-    }
+	while (true) {
+		if ((await fs.stat(join(current, subDirectory))).isDirectory()) {
+			return current;
+		}
 
-    if (current === root) {
-      return null;
-    }
+		if (current === root) {
+			return null;
+		}
 
-    current = dirname(current);
-  }
+		current = dirname(current);
+	}
 }

@@ -6,7 +6,7 @@ import {normalize} from 'node:path';
  * @returns {(file: string) => boolean}
  */
 export function createMatcher(pattern) {
-  const patterns = Array.isArray(pattern) ? pattern : [pattern];
+	const patterns = Array.isArray(pattern) ? pattern : [pattern];
 
-  return file => multimatch(normalize(file), patterns, {dot: true}).length > 0;
+	return file => multimatch(normalize(file), patterns, {dot: true}).length > 0;
 }

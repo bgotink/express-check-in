@@ -20,19 +20,19 @@ await promisify(exec)('tsc -p tsconfig.compile.json');
 // Write metadata
 
 await Promise.all([
-  cp('src', 'dist', {recursive: true}),
-  copyFile('README.md', 'dist/README.md'),
-  copyFile('LICENSE.md', 'dist/LICENSE.md'),
+	cp('src', 'dist', {recursive: true}),
+	copyFile('README.md', 'dist/README.md'),
+	copyFile('LICENSE.md', 'dist/LICENSE.md'),
 
-  readFile('package.json', 'utf-8').then(async rawPackageJson => {
-    const packageJson = JSON.parse(rawPackageJson);
-    // Allow the package to be published
-    delete packageJson.private;
-    // Remove all scripts and development info
-    delete packageJson.devDependencies;
-    delete packageJson.scripts;
-    delete packageJson.packageManager;
+	readFile('package.json', 'utf-8').then(async rawPackageJson => {
+		const packageJson = JSON.parse(rawPackageJson);
+		// Allow the package to be published
+		delete packageJson.private;
+		// Remove all scripts and development info
+		delete packageJson.devDependencies;
+		delete packageJson.scripts;
+		delete packageJson.packageManager;
 
-    await writeFile('dist/package.json', JSON.stringify(packageJson, null, 2));
-  }),
+		await writeFile('dist/package.json', JSON.stringify(packageJson, null, 2));
+	}),
 ]);
