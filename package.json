@@ -20,7 +20,7 @@
 	"bin": "./bin.js",
 	"peerDependencies": {
 		"cspell-lib": "^5.4.1 || ^6.0.0",
-		"prettier": "^2.3.0"
+		"prettier": "^2.3.0 || ^3.0.0"
 	},
 	"peerDependenciesMeta": {
 		"cspell-lib": {
@@ -35,6 +35,7 @@
 		"@types/mri": "^1.1.0",
 		"@types/node": "^18.13.0",
 		"@types/prettier": "^2.2.3",
+		"@types/prettier3": "npm:prettier@^3.0.0",
 		"cspell-lib": "^5.4.1",
 		"husky": "^8.0.3",
 		"is-ci": "^3.0.1",
@@ -44,7 +45,7 @@
 	},
 	"dependencies": {
 		"chalk": "^5.2.0",
-		"execa": "^7.0.0",
+		"execa": "^7.1.1",
 		"mri": "^1.2.0",
 		"multimatch": "^6.0.0"
 	},

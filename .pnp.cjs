@@ -32,9 +32,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/mri", "npm:1.1.0"],\
             ["@types/node", "npm:18.13.0"],\
             ["@types/prettier", "npm:2.2.3"],\
+            ["@types/prettier3", [\
+              "prettier",\
+              "npm:3.0.0"\
+            ]],\
             ["chalk", "npm:5.2.0"],\
             ["cspell-lib", "npm:5.4.1"],\
-            ["execa", "npm:7.0.0"],\
+            ["execa", "npm:7.1.1"],\
             ["husky", "npm:8.0.3"],\
             ["is-ci", "npm:3.0.1"],\
             ["mri", "npm:1.2.0"],\
@@ -838,10 +842,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["execa", [\
-        ["npm:7.0.0", {\
-          "packageLocation": "../../.yarn/berry/cache/execa-npm-7.0.0-1e61400383-8.zip/node_modules/execa/",\
+        ["npm:7.1.1", {\
+          "packageLocation": "../../.yarn/berry/cache/execa-npm-7.1.1-a258daf7fc-8.zip/node_modules/execa/",\
           "packageDependencies": [\
-            ["execa", "npm:7.0.0"],\
+            ["execa", "npm:7.1.1"],\
             ["cross-spawn", "npm:7.0.3"],\
             ["get-stream", "npm:6.0.1"],\
             ["human-signals", "npm:4.3.0"],\
@@ -864,9 +868,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/mri", "npm:1.1.0"],\
             ["@types/node", "npm:18.13.0"],\
             ["@types/prettier", "npm:2.2.3"],\
+            ["@types/prettier3", [\
+              "prettier",\
+              "npm:3.0.0"\
+            ]],\
             ["chalk", "npm:5.2.0"],\
             ["cspell-lib", "npm:5.4.1"],\
-            ["execa", "npm:7.0.0"],\
+            ["execa", "npm:7.1.1"],\
             ["husky", "npm:8.0.3"],\
             ["is-ci", "npm:3.0.1"],\
             ["mri", "npm:1.2.0"],\
@@ -1292,6 +1300,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "../../.yarn/berry/cache/prettier-npm-2.8.4-ba64a351d1-8.zip/node_modules/prettier/",\
           "packageDependencies": [\
             ["prettier", "npm:2.8.4"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:3.0.0", {\
+          "packageLocation": "../../.yarn/berry/cache/prettier-npm-3.0.0-7ffbcce680-8.zip/node_modules/prettier/",\
+          "packageDependencies": [\
+            ["prettier", "npm:3.0.0"]\
           ],\
           "linkType": "HARD"\
         }]\

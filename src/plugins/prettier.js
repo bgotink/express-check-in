@@ -1,6 +1,10 @@
 import fs from 'node:fs/promises';
 import {join} from 'node:path';
-import prettier from 'prettier';
+import * as prettier_ from 'prettier';
+
+/** @type {import('prettier') | import('prettier3')} */
+// @ts-ignore
+const prettier = 'version' in prettier_ ? prettier_ : prettier_.default;
 
 /**
  * @type {import('../plugin.js').PluginFactory}
@@ -38,20 +42,22 @@ const plugin = async (rootDirectory, directory) => {
 		markExamined();
 
 		const options = {
-			...(await prettier.resolveConfig(filename, {
-				editorconfig: true,
-			})),
+			.../** @type {import('prettier').Options & import('prettier3').Options} */ (
+				await prettier.resolveConfig(filename, {
+					editorconfig: true,
+				})
+			),
 			filepath: filename,
 		};
 
 		if (check) {
-			const isFormatted = prettier.check(content, options);
+			const isFormatted = await prettier.check(content, options);
 
 			markChecked(isFormatted);
 			return;
 		}
 
-		const output = prettier.format(content, options);
+		const output = await prettier.format(content, options);
 
 		if (output !== content) {
 			await writeFile(output);
