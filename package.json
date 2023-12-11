@@ -19,7 +19,7 @@
 	},
 	"bin": "./bin.js",
 	"peerDependencies": {
-		"cspell-lib": "^5.4.1 || ^6.0.0",
+		"cspell-lib": "^5.4.1 || ^6.0.0 || ^7.0.0 || ^8.0.0",
 		"prettier": "^2.3.0 || ^3.0.0"
 	},
 	"peerDependenciesMeta": {
