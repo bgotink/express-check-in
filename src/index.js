@@ -3,7 +3,6 @@ import {resolve} from 'node:path';
 
 import {findScm} from './scm.js';
 import {detectAvailableBuiltins, resolvePlugins} from './plugin.js';
-import {createMatcher} from './util/match.js';
 
 /**
  * @typedef {object} Options
@@ -64,6 +63,7 @@ export default async function expressCheckIn({
 	}
 
 	if (pattern != null) {
+		const {createMatcher} = await import('./util/match.js');
 		changedFiles = changedFiles.filter(createMatcher(pattern));
 	}
 

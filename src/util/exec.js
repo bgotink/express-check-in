@@ -1,5 +1,5 @@
-import {execa} from 'execa';
-import {Readable} from 'stream';
+import child_process from 'node:child_process';
+import {Readable} from 'node:stream';
 
 export class ExecError extends Error {
 	stderr;
@@ -10,7 +10,7 @@ export class ExecError extends Error {
 	 */
 	constructor(message, stderr) {
 		super(message);
-		this.name = new.target.name;
+		this.name = 'ExecError';
 		this.stderr = stderr;
 	}
 }
@@ -23,7 +23,7 @@ export class ExecError extends Error {
  */
 export function exec(command, args, {cwd, input}) {
 	return new Promise((resolve, reject) => {
-		const child = execa(command, args, {
+		const child = child_process.spawn(command, args, {
 			cwd,
 			stdio: [input ? 'pipe' : 'ignore', 'pipe', 'pipe'],
 		});
@@ -51,7 +51,7 @@ export function exec(command, args, {cwd, input}) {
 					),
 				);
 			} else {
-				resolve(Buffer.concat(out).toString('utf-8'));
+				resolve(Buffer.concat(out).toString('utf-8').trimEnd());
 			}
 		});
 	});

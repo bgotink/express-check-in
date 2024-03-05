@@ -38,8 +38,9 @@ npx -p prettier@latest -p express-check-in express-check-in
 
 With `npm`:
 
-1. Add `"express-check-in": "express-check-in"` to the `"scripts"` section of `package.json`.
-2. `npm run express-check-in`
+```shellsession
+npm exec express-check-in
+```
 
 ## Plugins
 
@@ -70,7 +71,7 @@ Partially staged files will be re-staged after formatting, but the files on disk
 
 ### `--pattern`
 
-Filters the files for the given [minimatch](https://github.com/isaacs/minimatch) pattern.  
+Filters the files for the given [micromatch](https://github.com/micromatch/micromatch) pattern.  
 For example `express-check-in --pattern "**/*.*(js|jsx)"` or `express-check-in --pattern "**/*.js" --pattern "**/*.jsx"`
 
 ### `--plugin`

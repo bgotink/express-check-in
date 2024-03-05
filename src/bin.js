@@ -1,46 +1,100 @@
 #!/usr/bin/env node
 'use strict';
 
-import chalk from 'chalk';
-import mri from 'mri';
+import {parseArgs} from 'node:util';
 
 import expressCheckIn from './index.js';
 
-const args = mri(process.argv.slice(2), {
-	alias: {
-		'resolve-config': 'resolveConfig',
-		plugin: 'plugins',
-		// 'ignore-path': 'ignorePath',
+/** @param {unknown} text */
+function bold(text) {
+	return `\x1b[1m${text}\x1b[22m`;
+}
+
+const {
+	values: {
+		bail,
+		check,
+		directory,
+		pattern,
+		plugin: plugins,
+		'resolve-config': resolveConfig,
+		staged,
+		verbose,
+	},
+} = parseArgs({
+	// cspell:ignore positionals
+	allowPositionals: false,
+	strict: true,
+	options: {
+		bail: {
+			type: 'boolean',
+			default: false,
+		},
+		check: {
+			type: 'boolean',
+			default: false,
+		},
+		directory: {
+			type: 'string',
+		},
+		pattern: {
+			type: 'string',
+			multiple: true,
+		},
+		plugin: {
+			type: 'string',
+			multiple: true,
+		},
+		'resolve-config': {
+			type: 'boolean',
+			default: true,
+		},
+		staged: {
+			type: 'boolean',
+			default: false,
+		},
+		verbose: {
+			type: 'boolean',
+			default: false,
+			short: 'v',
+		},
 	},
 });
 
 expressCheckIn({
-	...args,
+	bail,
+	check,
+	directory,
+	pattern,
+	plugins,
+	resolveConfig,
+	staged,
+	verbose,
 
 	onFoundChangedFiles: changedFiles => {
 		console.log(
-			`🎯  Found ${chalk.bold(changedFiles.length)} changed ${
+			`🎯  Found ${bold(changedFiles.length)} changed ${
 				changedFiles.length === 1 ? 'file' : 'files'
 			}.`,
 		);
 	},
 
 	onPartiallyStagedFile: file => {
-		console.log(`✍️  Fixing up partially staged ${chalk.bold(file)}.`);
+		console.log(`✍️  Fixing up partially staged ${bold(file)}.`);
 	},
 
 	onWriteFile: file => {
-		console.log(`✍️  Fixing up ${chalk.bold(file)}.`);
+		console.log(`✍️  Fixing up ${bold(file)}.`);
 	},
 
 	onCheckFile: (file, isOkay, reason) => {
 		if (!isOkay) {
-			console.log(`⛔️  Check failed: ${chalk.bold(file)} – ${reason}`);
+			console.log(`⛔️  Check failed: ${bold(file)} – ${reason}`);
 		}
 	},
 
 	onExamineFile: file => {
-		console.log(`🔍  Examining ${chalk.bold(file)}.`);
+		console.log(`🔍  Examining ${bold(file)}.`);
 	},
 })
 	.then(expressCheckInResult => {

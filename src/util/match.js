@@ -1,4 +1,4 @@
-import multimatch from 'multimatch';
+import micromatch from 'micromatch';
 import {normalize} from 'node:path';
 
 /**
@@ -8,5 +8,5 @@ import {normalize} from 'node:path';
 export function createMatcher(pattern) {
 	const patterns = Array.isArray(pattern) ? pattern : [pattern];
 
-	return file => multimatch(normalize(file), patterns, {dot: true}).length > 0;
+	return file => micromatch.isMatch(normalize(file), patterns, {dot: true});
 }
